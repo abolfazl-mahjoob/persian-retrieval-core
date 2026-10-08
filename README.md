@@ -18,13 +18,15 @@ retrieval evaluation.
 | BM25 | In-memory lexical retrieval, deterministic ranking |
 | RRF | Merge lexical and external vector result lists with optional weights |
 | Evaluation | Macro Recall@k and MRR@k for labelled queries |
-| Quality | pytest, Ruff, package build, Python 3.11–3.13, Docker test |
+| Quality | independent BM25 reference, edge-case tests, branch coverage, strict mypy, Ruff, multi-Python CI, Docker |
 
 ## Install & run
 
 ```bash
 python -m pip install -e '.[dev]'
-python -m pytest -q
+python -m pytest --cov=persian_retrieval --cov-branch --cov-fail-under=90
+python scripts/evaluate_fixture.py
+python scripts/benchmark_index.py --documents 2000 --queries 100
 python examples/basic.py
 ```
 
@@ -51,6 +53,28 @@ combined = reciprocal_rank_fusion([lexical_ids, vector_ids])
 print(combined)
 ```
 
+## Quality verification
+
+The test suite contains a deliberately independent reference implementation
+of the BM25 scoring equation, randomized index-vs-reference comparisons,
+adversarial RRF inputs, and bounded chunking regression tests. CI runs strict
+typing, code analysis, branch coverage and Docker verification.
+
+The included [Persian evaluation fixture](benchmarks/persian_helpdesk_smoke_v1.json)
+has **40 hand-written synthetic documents and 40 hand-written labelled queries**.
+It is a regression smoke test, **not a representative real-user benchmark**.
+Perfect scores on this fixture do not establish generalization to typos,
+synonyms, unseen domains, or production workloads. To reproduce:
+
+```bash
+python scripts/evaluate_fixture.py --min-recall3 0.75
+python scripts/benchmark_index.py --documents 2000 --queries 100
+```
+
+Read [measurement methodology and limitations](docs/quality.md).
+Query timing and traced build-memory figures are machine-specific and should
+not be interpreted as guaranteed service performance.
+
 ## Engineering boundaries
 
 This is **not** an LLM wrapper, a hosted vector database, a complete RAG
@@ -66,7 +90,9 @@ trade-offs.
 
 ## Status
 
-**0.1.0 candidate.** Release only after CI, standalone tests and
-licensing clearance. MIT license included for the standalone implementation.
+**0.1.0 candidate.** The reusable primitives have automated verification; not
+validated as a production-ready RAG/search service. Source-rights clearance for
+code adapted from Hamkalam remains a prerequisite for downstream use. MIT
+license covers this standalone repository, subject to those rights.
 
 For implementation notes see [Architecture](docs/architecture.md).
