@@ -75,7 +75,7 @@ def main() -> int:
         "result_count": hits,
         "limitations": [
             "Synthetic and seed-controlled documents",
-            "Peak allocation includes corpus already in memory",
+            "Peak allocation traces index construction only; input corpus was allocated before tracing",
             "Not comparable across machines without environment reporting",
             "No durability, concurrency or cross-process benchmark",
         ],
