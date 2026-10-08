@@ -10,6 +10,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -23,14 +24,18 @@ jobs:
           cache-dependency-path: pyproject.toml
       - run: python -m pip install --upgrade pip
       - run: pip install -e '.[dev]'
-      - run: ruff check src tests examples
-      - run: python -m pytest -q
+      - run: ruff check src tests examples scripts
+      - run: mypy --strict src/persian_retrieval
+      - run: python -m pytest --cov=persian_retrieval --cov-branch --cov-report=term-missing --cov-fail-under=90 -q
+      - run: python scripts/evaluate_fixture.py --min-recall3 0.75
+      - run: python scripts/benchmark_index.py --documents 250 --queries 10
       - run: python examples/basic.py
       - run: python -m build
       - run: python -m pip check
 
   docker:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - run: docker build -t persian-retrieval-core:test .
