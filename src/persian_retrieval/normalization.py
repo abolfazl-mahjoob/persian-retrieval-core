@@ -51,12 +51,12 @@ def lexical_terms(
     Call with deduplicate=False for document term frequencies.
     """
     ignored = _DEFAULT_STOPWORDS if stopwords is None else frozenset(
-        normalize_persian(word) for word in stopwords
+        normalize_persian(word).casefold() for word in stopwords
     )
     tokens: list[str] = []
     seen: set[str] = set()
     for raw in _SEPARATOR.split(normalize_persian(text)):
-        token = raw.strip(_ZWNJ).strip()
+        token = raw.strip(_ZWNJ).strip().casefold()
         candidates = [token, *token.split(_ZWNJ)] if _ZWNJ in token else [token]
         for candidate in candidates:
             if len(candidate) < 2 or (candidate.isdigit() and len(candidate) < 3):
