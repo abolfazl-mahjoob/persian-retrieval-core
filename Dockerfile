@@ -4,5 +4,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 COPY pyproject.toml README.md ./
 COPY src ./src
 COPY tests ./tests
+COPY benchmarks ./benchmarks
 RUN python -m pip install --no-cache-dir -e '.[dev]'
 CMD ["python", "-m", "pytest", "-q"]
