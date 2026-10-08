@@ -1,8 +1,8 @@
 """Transparent retrieval evaluation (macro Recall@k and MRR@k)."""
 from __future__ import annotations
 
-from dataclasses import dataclass
 from collections.abc import Sequence
+from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
