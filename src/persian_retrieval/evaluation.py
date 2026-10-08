@@ -29,8 +29,8 @@ def evaluate_rankings(
     *,
     k: int = 5,
 ) -> EvaluationSummary:
-    if k < 1:
-        raise ValueError("k must be positive")
+    if not isinstance(k, int) or isinstance(k, bool) or k < 1:
+        raise ValueError("k must be a positive integer")
     if len(cases) != len(rankings):
         raise ValueError("one ranking must be supplied per query")
     if not cases:

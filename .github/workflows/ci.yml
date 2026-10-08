@@ -2,7 +2,12 @@ name: quality-gate
 
 on:
   push:
+    branches: [main]
   pull_request:
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -10,6 +15,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -23,15 +29,36 @@ jobs:
           cache-dependency-path: pyproject.toml
       - run: python -m pip install --upgrade pip
       - run: pip install -e '.[dev]'
-      - run: ruff check src tests examples
-      - run: python -m pytest -q
+      - run: ruff check src tests examples scripts
+      - run: mypy --strict src/persian_retrieval
+      - run: python -m pytest --cov=persian_retrieval --cov-branch --cov-report=term-missing --cov-fail-under=90 -q
+      - run: python scripts/evaluate_fixture.py --min-recall3 0.75
+      - run: python scripts/benchmark_index.py --documents 250 --queries 10
       - run: python examples/basic.py
       - run: python -m build
       - run: python -m pip check
 
   docker:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - run: docker build -t persian-retrieval-core:test .
       - run: docker run --rm persian-retrieval-core:test
+
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e .
+      - name: Capture reproducible synthetic 2K corpus timing
+        run: python scripts/benchmark_index.py --documents 2000 --queries 100 > benchmark-result.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-microbenchmark-python-3-12
+          path: benchmark-result.json
+          retention-days: 14

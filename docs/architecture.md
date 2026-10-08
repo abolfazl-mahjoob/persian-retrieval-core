@@ -16,7 +16,7 @@ flowchart LR
 
 - `normalization`: Arabic-to-Persian script normalization, digits, diacritics, ZWNJ-aware tokens.
 - `chunking`: Markdown heading boundaries; no overlap between unrelated heading paths; approximate token budget.
-- `search`: simple **in-memory** lexical BM25 index; intended for examples and small corpora.
+- `search`: immutable **in-memory inverted-postings** BM25 index; query work is proportional to matching postings instead of a full-document scan (results still require sorting).
 - `fusion`: deterministic weighted RRF; accepts lists of document identifiers from **any** retrieval provider.
 - `evaluation`: macro Recall@k and MRR@k for labelled query-to-document rankings.
 
@@ -29,6 +29,8 @@ flowchart LR
 5. **Chunk token size is approximate.** Use a model-specific tokenizer and validation for strict context-window budgets.
 6. **BM25 is in-memory.** For sizable collections use a durable search backend and preserve the clean fusion interface.
 7. **No hard-coded performance claims.** Run evaluations on your own held-out corpus and report dataset, denominator and retrieval configuration.
+8. **Duplicate vector IDs are ignored before rank assignment**, and a source with weight zero contributes no documents.
+9. **Long heading paths fail explicitly** when the configured approximate token budget cannot fit the prefix. Passing the budget is based on a character heuristic, not model tokens.
 
 ## Provenance
 
@@ -42,5 +44,5 @@ this repository.
 ## Release gate
 
 Only publish when (a) the licensing rights are confirmed; (b) Python 3.11–3.13
-unit tests, Ruff, package build and Docker test pass; and (c) no credentials,
+unit tests, Ruff, strict mypy, branch coverage, package build and Docker test pass; and (c) no credentials,
 private datasets, or embedded environment files are committed.

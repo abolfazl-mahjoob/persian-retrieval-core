@@ -1,12 +1,12 @@
-"""Small dependency-free BM25 lexical index.
+"""Dependency-light in-memory BM25 with an inverted index.
 
-The index is deliberately in-memory. Pair it with an external vector or SQL
-retriever and fuse ranked identifiers with reciprocal_rank_fusion.
+This is intentionally a small-corpus retrieval component, not an on-disk
+full-text search engine or a distributed index.
 """
 from __future__ import annotations
 
 import math
-from collections import Counter
+from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 
@@ -20,6 +20,8 @@ class SearchHit:
 
 
 class LexicalIndex:
+    """Immutable index; query work scales with postings, not all documents."""
+
     def __init__(
         self,
         documents: Mapping[str, str],
@@ -28,42 +30,63 @@ class LexicalIndex:
         k1: float = 1.5,
         b: float = 0.75,
     ) -> None:
-        if k1 <= 0 or not 0 <= b <= 1 or not math.isfinite(k1):
+        if not math.isfinite(k1) or k1 <= 0 or not math.isfinite(b) or not 0 <= b <= 1:
             raise ValueError("invalid BM25 parameters")
         self.k1, self.b = k1, b
         self.stopwords = tuple(stopwords) if stopwords is not None else None
-        self._counts: dict[str, Counter[str]] = {}
-        self._df: Counter[str] = Counter()
+        self._doc_lengths: dict[str, int] = {}
+        self._postings: dict[str, list[tuple[str, int]]] = defaultdict(list)
         total_terms = 0
+
         for doc_id, content in documents.items():
-            if not doc_id:
-                raise ValueError("document IDs cannot be empty")
+            if not isinstance(doc_id, str) or not doc_id:
+                raise ValueError("document IDs must be nonempty strings")
+            if not isinstance(content, str):
+                raise TypeError("document content must be a string")
             terms = lexical_terms(content, stopwords=self.stopwords, deduplicate=False)
             counts = Counter(terms)
-            self._counts[doc_id] = counts
-            self._df.update(counts.keys())
-            total_terms += sum(counts.values())
-        self._average_length = total_terms / len(self._counts) if self._counts else 0
+            doc_length = sum(counts.values())
+            self._doc_lengths[doc_id] = doc_length
+            total_terms += doc_length
+            for term, count in counts.items():
+                self._postings[term].append((doc_id, count))
+
+        self._document_count = len(self._doc_lengths)
+        self._average_length = (
+            total_terms / self._document_count if self._document_count else 0.0
+        )
+
+    @property
+    def document_count(self) -> int:
+        return self._document_count
+
+    @property
+    def vocabulary_size(self) -> int:
+        return len(self._postings)
 
     def search(self, query: str, *, limit: int = 10) -> list[SearchHit]:
-        if limit < 1:
-            raise ValueError("limit must be positive")
+        if not isinstance(limit, int) or isinstance(limit, bool) or limit < 1:
+            raise ValueError("limit must be a positive integer")
         terms = lexical_terms(query, stopwords=self.stopwords)
-        if not terms or not self._counts:
+        if not terms or not self._document_count:
             return []
-        n = len(self._counts)
-        ranked: list[SearchHit] = []
-        for doc_id, counts in self._counts.items():
-            doc_length = sum(counts.values())
-            score = 0.0
-            for term in terms:
-                tf = counts[term]
-                if not tf:
-                    continue
-                df = self._df[term]
-                idf = math.log1p((n - df + 0.5) / (df + 0.5))
+
+        scores: dict[str, float] = defaultdict(float)
+        n = self._document_count
+        for term in terms:
+            postings = self._postings.get(term, ())
+            if not postings:
+                continue
+            df = len(postings)
+            idf = math.log1p((n - df + 0.5) / (df + 0.5))
+            for doc_id, tf in postings:
+                doc_length = self._doc_lengths[doc_id]
                 norm = 1 - self.b + self.b * doc_length / max(1e-9, self._average_length)
-                score += idf * tf * (self.k1 + 1) / (tf + self.k1 * norm)
-            if score > 0:
-                ranked.append(SearchHit(doc_id, score))
-        return sorted(ranked, key=lambda item: (-item.score, item.document_id))[:limit]
+                scores[doc_id] += idf * tf * (self.k1 + 1) / (tf + self.k1 * norm)
+
+        return [
+            SearchHit(doc_id, score)
+            for doc_id, score in sorted(scores.items(), key=lambda row: (-row[1], row[0]))[
+                :limit
+            ]
+        ]

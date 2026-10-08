@@ -4,6 +4,7 @@ This is an *approximate* character-budget splitter, not a tokenizer for a specif
 """
 from __future__ import annotations
 
+import math
 import re
 from dataclasses import dataclass
 
@@ -57,12 +58,12 @@ def chunk_text(
 ) -> list[TextChunk]:
     """Chunk Persian Markdown without carrying overlap across distinct headings.
 
-    `target_tokens` includes the heading prefix in each chunk. For unusual, very
-    long headings the prefix itself can exceed the desired approximate budget.
+    `target_tokens` includes the heading prefix in each chunk. If the heading
+    prefix consumes the entire approximate budget, raise ValueError.
     """
-    if target_tokens < 16:
-        raise ValueError("target_tokens must be >= 16")
-    if not 0 <= overlap_ratio < 0.5:
+    if not isinstance(target_tokens, int) or isinstance(target_tokens, bool) or target_tokens < 16:
+        raise ValueError("target_tokens must be an integer >= 16")
+    if not math.isfinite(overlap_ratio) or not 0 <= overlap_ratio < 0.5:
         raise ValueError("overlap_ratio must be in [0, 0.5)")
     normalized = normalize_persian(text)
     if not normalized:
@@ -91,7 +92,9 @@ def chunk_text(
     output: list[TextChunk] = []
     for path, paragraphs in groups:
         prefix = " > ".join(part for part in (title, *path) if part)
-        budget = max(1, target_tokens - (approximate_tokens(prefix) + 1 if prefix else 0))
+        budget = target_tokens - (approximate_tokens(prefix + "\n") if prefix else 0)
+        if budget < 1:
+            raise ValueError("heading prefix exceeds target_tokens budget")
         segments: list[str] = []
         for paragraph in paragraphs:
             for sentence in _SENTENCE.split(paragraph):
