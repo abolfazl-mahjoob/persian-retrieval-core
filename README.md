@@ -68,3 +68,5 @@ trade-offs.
 
 **0.1.0 candidate.** Release only after CI, standalone tests and
 licensing clearance. MIT license included for the standalone implementation.
+
+For implementation notes see [Architecture](docs/architecture.md).
