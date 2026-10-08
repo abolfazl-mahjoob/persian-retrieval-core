@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Sequence
+from collections.abc import Sequence
 
 
 @dataclass(frozen=True)
@@ -46,7 +46,10 @@ def evaluate_rankings(
                 seen.add(item)
         top = distinct[:k]
         recalls.append(len(case.relevant_ids.intersection(top)) / len(case.relevant_ids))
-        rank = next((index for index, value in enumerate(top, 1) if value in case.relevant_ids), None)
+        rank = next(
+            (position for position, value in enumerate(top, 1) if value in case.relevant_ids),
+            None,
+        )
         reciprocal_ranks.append(1.0 / rank if rank is not None else 0.0)
     return EvaluationSummary(
         len(cases),
