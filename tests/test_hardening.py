@@ -40,7 +40,7 @@ def test_rrf_ties_preserve_first_seen_order() -> None:
 
 def test_rrf_empty_and_zero_weight() -> None:
     assert reciprocal_rank_fusion([]) == []
-    assert reciprocal_rank_fusion([["one"]], weights=[0.0]) == [("one", 0.0)]
+    assert reciprocal_rank_fusion([["one"]], weights=[0.0]) == []
 
 
 @pytest.mark.parametrize("k", [-1, 0, True, 1.5])
