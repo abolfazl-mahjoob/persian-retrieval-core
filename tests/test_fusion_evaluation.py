@@ -39,3 +39,9 @@ def test_empty_evaluation_and_invalid_cases() -> None:
         QueryCase("bad", frozenset())
     with pytest.raises(ValueError):
         evaluate_rankings([QueryCase("ok", frozenset({"a"}))], [])
+
+
+@pytest.mark.parametrize("k", [False, 0, -1, 2.5])
+def test_evaluation_rejects_nonpositive_and_noninteger_k(k: object) -> None:
+    with pytest.raises(ValueError):
+        evaluate_rankings([], [], k=k)  # type: ignore[arg-type]
