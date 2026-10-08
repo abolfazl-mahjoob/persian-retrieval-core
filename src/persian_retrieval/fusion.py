@@ -28,6 +28,8 @@ def reciprocal_rank_fusion(
     score: dict[IdT, float] = {}
     first_seen: dict[IdT, int] = {}
     for ranking, weight in zip(rankings, chosen, strict=True):
+        if weight == 0:
+            continue
         unique: set[IdT] = set()
         for item in ranking:
             if item in unique:
