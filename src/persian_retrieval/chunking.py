@@ -99,7 +99,11 @@ def chunk_text(
                     segments.extend(_split_long(sentence.strip(), budget))
         current: list[str] = []
 
-        def emit(items: list[str]) -> None:
+        def emit(
+            items: list[str],
+            prefix: str = prefix,
+            path: tuple[str, ...] = path,
+        ) -> None:
             body = " ".join(items).strip()
             if not body:
                 return
