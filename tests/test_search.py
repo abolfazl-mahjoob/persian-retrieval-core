@@ -2,7 +2,6 @@ import pytest
 
 from persian_retrieval import LexicalIndex
 
-
 DOCS = {
     "shipping": "ارسال سفارش تهران دو روز کاری طول می‌کشد.",
     "returns": "بازگشت کالا و مرجوعی تا هفت روز امکان‌پذیر است.",
