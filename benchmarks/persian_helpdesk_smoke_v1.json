@@ -1,0 +1,296 @@
+{
+  "metadata": {
+    "name": "handwritten-persian-helpdesk-smoke-v1",
+    "source": "handwritten synthetic examples; no client data",
+    "license": "CC0-1.0",
+    "scope": "lexical retrieval smoke test, NOT real-world evaluation"
+  },
+  "documents": {
+    "shipping-tehran": "ارسال سفارش در شهر تهران معمولاً یک تا دو روز کاری طول می‌کشد.",
+    "shipping-provinces": "ارسال بسته برای شهرستان سه تا پنج روز کاری زمان می‌برد.",
+    "returns-window": "کالای سالم تا هفت روز پس از دریافت قابل مرجوعی است.",
+    "returns-exceptions": "کالاهای دیجیتال دانلودشده قابل بازگشت نیستند.",
+    "working-hours": "پشتیبانی تلفنی شنبه تا چهارشنبه از ساعت ۹ تا ۱۷ پاسخ‌گو است.",
+    "weekend-hours": "پنجشنبه پشتیبانی تا ساعت ۱۳ فعال است و جمعه تعطیل است.",
+    "password-reset": "برای بازیابی رمز عبور، لینک بازنشانی به ایمیل کاربر ارسال می‌شود.",
+    "otp-login": "ورود با رمز یکبارمصرف پیامکی انجام می‌شود و کد پنج دقیقه اعتبار دارد.",
+    "course-enroll": "دانشجو می‌تواند بعد از ثبت‌نام به دوره‌های خریداری‌شده دسترسی پیدا کند.",
+    "course-video": "ویدیوهای دوره آموزشی در بخش درس‌ها قابل پخش هستند.",
+    "live-class": "کلاس زنده همراه با گفتگو و اشتراک‌گذاری صفحه برگزار می‌شود.",
+    "recordings": "ضبط جلسات کلاس پس از پایان نشست در آرشیو قرار می‌گیرد.",
+    "certificates": "گواهی پایان دوره پس از موفقیت در آزمون نهایی صادر می‌شود.",
+    "exam-retake": "دانشجو اجازه دارد آزمون را تا سه بار تکرار کند.",
+    "billing-invoice": "فاکتور خرید از قسمت صورت‌حساب پنل دریافت می‌شود.",
+    "billing-refund": "بازپرداخت وجه به حساب بانکی صاحب سفارش انجام می‌شود.",
+    "profile-email": "تغییر ایمیل حساب از بخش تنظیمات پروفایل امکان‌پذیر است.",
+    "profile-phone": "برای تغییر شماره تلفن باید شماره جدید تأیید شود.",
+    "security-session": "نشست‌های فعال کاربر در پنل امنیتی نمایش داده می‌شوند.",
+    "security-twofactor": "تأیید دومرحله‌ای از طریق برنامه احراز هویت فعال می‌شود.",
+    "api-limit": "درخواست‌های API محدودیت نرخ دارند و پاسخ ۴۲۹ برای تعداد بیش از حد برمی‌گردد.",
+    "api-token": "توکن دسترسی API در صفحه توسعه‌دهندگان ساخته و لغو می‌شود.",
+    "backup-daily": "نسخه پشتیبان دیتابیس هر روز به فضای ذخیره‌سازی جدا منتقل می‌شود.",
+    "backup-restore": "بازیابی نسخه پشتیبان نیازمند انتخاب تاریخ و تأیید مدیر است.",
+    "product-search": "جستجوی محصولات با نام، دسته‌بندی و محدوده قیمت امکان‌پذیر است.",
+    "product-stock": "موجودی کالا هنگام ثبت سفارش به‌روزرسانی می‌شود.",
+    "cart-discount": "کد تخفیف معتبر در سبد خرید روی مبلغ سفارش اعمال می‌شود.",
+    "payment-online": "پرداخت آنلاین از طریق درگاه بانکی و با کارت عضو شتاب انجام می‌شود.",
+    "payment-installment": "پرداخت اقساطی فقط برای برخی دوره‌ها و بعد از تأیید امکان‌پذیر است.",
+    "notification-email": "اعلان مربوط به سفارش و فاکتور از طریق ایمیل ارسال می‌شود.",
+    "notification-sms": "پیامک تغییر وضعیت مرسوله به شماره موبایل مشتری ارسال می‌شود.",
+    "privacy-export": "کاربر می‌تواند فایل خروجی اطلاعات شخصی خودش را درخواست کند.",
+    "privacy-delete": "حذف حساب پس از احراز هویت و با رعایت مهلت نگهداری اطلاعات انجام می‌شود.",
+    "student-limits": "ظرفیت کلاس به تعداد دانشجویان ثبت‌نام‌شده محدود است.",
+    "course-subtitles": "زیرنویس فارسی و انگلیسی در پخش‌کننده آموزشی قابل انتخاب است.",
+    "course-offline": "دانلود آفلاین فایل دوره فقط در برنامه اختصاصی ممکن است.",
+    "teacher-payout": "درآمد مدرس پس از تسویه مالی به حساب او واریز می‌شود.",
+    "teacher-report": "گزارش تعداد دانشجویان و فروش دوره در داشبورد مدرس نمایش داده می‌شود.",
+    "support-ticket": "تیکت پشتیبانی در پنل ثبت می‌شود و شماره پیگیری دارد.",
+    "support-chat": "گفتگوی آنلاین با پشتیبان در ساعات کاری فعال است."
+  },
+  "queries": [
+    {
+      "query": "ارسال تهران چند روز طول میکشه؟",
+      "relevant_ids": [
+        "shipping-tehran"
+      ]
+    },
+    {
+      "query": "بسته شهرستان کی تحویل میشه؟",
+      "relevant_ids": [
+        "shipping-provinces"
+      ]
+    },
+    {
+      "query": "مرجوعی کالای سالم تا چند روزه؟",
+      "relevant_ids": [
+        "returns-window"
+      ]
+    },
+    {
+      "query": "دانلود دیجیتال بازگشت داره؟",
+      "relevant_ids": [
+        "returns-exceptions"
+      ]
+    },
+    {
+      "query": "ساعت پشتیبانی شنبه تا چهارشنبه چنده؟",
+      "relevant_ids": [
+        "working-hours"
+      ]
+    },
+    {
+      "query": "پنجشنبه پشتیبانی ساعت چند تعطیل میشه؟",
+      "relevant_ids": [
+        "weekend-hours"
+      ]
+    },
+    {
+      "query": "بازیابی رمز با ایمیل چطوریه؟",
+      "relevant_ids": [
+        "password-reset"
+      ]
+    },
+    {
+      "query": "کد ورود پیامکی چند دقیقه اعتبار داره؟",
+      "relevant_ids": [
+        "otp-login"
+      ]
+    },
+    {
+      "query": "دسترسی دانشجو بعد ثبت نام دوره",
+      "relevant_ids": [
+        "course-enroll"
+      ]
+    },
+    {
+      "query": "پخش ویدیو درسهای دوره",
+      "relevant_ids": [
+        "course-video"
+      ]
+    },
+    {
+      "query": "کلاس زنده اشتراک صفحه داره؟",
+      "relevant_ids": [
+        "live-class"
+      ]
+    },
+    {
+      "query": "ضبط جلسه کلاس تو آرشیو",
+      "relevant_ids": [
+        "recordings"
+      ]
+    },
+    {
+      "query": "گواهی پایان دوره آزمون نهایی",
+      "relevant_ids": [
+        "certificates"
+      ]
+    },
+    {
+      "query": "تکرار آزمون چند بار ممکنه؟",
+      "relevant_ids": [
+        "exam-retake"
+      ]
+    },
+    {
+      "query": "دانلود فاکتور از پنل",
+      "relevant_ids": [
+        "billing-invoice"
+      ]
+    },
+    {
+      "query": "بازپرداخت به حساب بانکی انجام میشه؟",
+      "relevant_ids": [
+        "billing-refund"
+      ]
+    },
+    {
+      "query": "ایمیل پروفایل رو از کجا تغییر بدم؟",
+      "relevant_ids": [
+        "profile-email"
+      ]
+    },
+    {
+      "query": "تأیید شماره تلفن جدید",
+      "relevant_ids": [
+        "profile-phone"
+      ]
+    },
+    {
+      "query": "نشست فعال حساب در کدام بخش نمایش داده میشه؟",
+      "relevant_ids": [
+        "security-session"
+      ]
+    },
+    {
+      "query": "فعال کردن احراز هویت دومرحله‌ای",
+      "relevant_ids": [
+        "security-twofactor"
+      ]
+    },
+    {
+      "query": "محدودیت نرخ API و پاسخ ۴۲۹",
+      "relevant_ids": [
+        "api-limit"
+      ]
+    },
+    {
+      "query": "ساخت توکن دسترسی برنامه نویسی API",
+      "relevant_ids": [
+        "api-token"
+      ]
+    },
+    {
+      "query": "پشتیبان دیتابیس روزانه",
+      "relevant_ids": [
+        "backup-daily"
+      ]
+    },
+    {
+      "query": "بازیابی نسخه پشتیبان تاریخ",
+      "relevant_ids": [
+        "backup-restore"
+      ]
+    },
+    {
+      "query": "جستجوی محصولات بر اساس محدوده قیمت",
+      "relevant_ids": [
+        "product-search"
+      ]
+    },
+    {
+      "query": "به‌روزرسانی موجودی بعد سفارش",
+      "relevant_ids": [
+        "product-stock"
+      ]
+    },
+    {
+      "query": "اعمال کد تخفیف در سبد خرید",
+      "relevant_ids": [
+        "cart-discount"
+      ]
+    },
+    {
+      "query": "پرداخت آنلاین درگاه بانکی شتاب",
+      "relevant_ids": [
+        "payment-online"
+      ]
+    },
+    {
+      "query": "شرایط پرداخت اقساطی دوره",
+      "relevant_ids": [
+        "payment-installment"
+      ]
+    },
+    {
+      "query": "اعلان ایمیل سفارش و فاکتور",
+      "relevant_ids": [
+        "notification-email"
+      ]
+    },
+    {
+      "query": "پیامک وضعیت مرسوله",
+      "relevant_ids": [
+        "notification-sms"
+      ]
+    },
+    {
+      "query": "خروجی اطلاعات شخصی کاربر",
+      "relevant_ids": [
+        "privacy-export"
+      ]
+    },
+    {
+      "query": "حذف حساب احراز هویت",
+      "relevant_ids": [
+        "privacy-delete"
+      ]
+    },
+    {
+      "query": "ظرفیت ثبت نام دانشجویان کلاس",
+      "relevant_ids": [
+        "student-limits"
+      ]
+    },
+    {
+      "query": "زیرنویس انگلیسی و فارسی پلیر",
+      "relevant_ids": [
+        "course-subtitles"
+      ]
+    },
+    {
+      "query": "دانلود آفلاین دوره در برنامه",
+      "relevant_ids": [
+        "course-offline"
+      ]
+    },
+    {
+      "query": "تسویه درآمد مدرس",
+      "relevant_ids": [
+        "teacher-payout"
+      ]
+    },
+    {
+      "query": "گزارش فروش داشبورد مدرس",
+      "relevant_ids": [
+        "teacher-report"
+      ]
+    },
+    {
+      "query": "تیکت پشتیبانی شماره پیگیری",
+      "relevant_ids": [
+        "support-ticket"
+      ]
+    },
+    {
+      "query": "چت آنلاین پشتیبان ساعات کاری",
+      "relevant_ids": [
+        "support-chat"
+      ]
+    }
+  ],
+  "negative_queries": [
+    "جریمه دیرکرد در ارسال",
+    "چطور دامنه رو تمدید کنیم"
+  ]
+}
